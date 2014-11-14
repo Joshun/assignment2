@@ -12,7 +12,10 @@ public class Picture {
 	public static void main(String args[]) {
 		
 		/* Screen size (in pixels) and input filename */
-		final int SCREEN_SIZE = 200;
+		final int SCREEN_SIZE = 600;
+		final int BLOCK_SIZE = 3;
+		final int ARRAY_SIZE = SCREEN_SIZE / BLOCK_SIZE;
+		
 		final String FILE_INPUT = "picture.txt";
 
 		/* Colour values in R, G, B format */
@@ -32,16 +35,14 @@ public class Picture {
 		final String fileData = fileInput.readString();
 		
 		/* Create new array to store picture contents */
-		int[][] screenSquares = new int[SCREEN_SIZE][SCREEN_SIZE];
+		int[][] screenSquares = new int[ARRAY_SIZE][ARRAY_SIZE];
 		
 		boolean done = false;
 		
 		/* Load values from string into integer array */
-		
-
-		for(int screenRow=0; screenRow<SCREEN_SIZE && !done; screenRow++) {
-			for(int screenColumn=0; screenColumn<SCREEN_SIZE; screenColumn++) {
-				int currentChar = (screenRow * SCREEN_SIZE) + screenColumn;
+		for(int screenRow=0; screenRow<ARRAY_SIZE && !done; screenRow++) {
+			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
+				int currentChar = (screenRow * ARRAY_SIZE) + screenColumn;
 				
 				/* Check to make sure there aren't too many numbers for array */
 				if( currentChar > (fileData.length() - 1) ) {
@@ -49,15 +50,14 @@ public class Picture {
 					done = true;
 					break;
 				}
+				
 				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentChar));
 				System.out.println(screenSquares[screenRow][screenColumn]);
-				
-
 			}
 		}
 		/* Display colour values on screen */
-		for(int screenRow=0; screenRow<SCREEN_SIZE; screenRow++) {
-			for(int screenColumn=0; screenColumn<SCREEN_SIZE; screenColumn++) {
+		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
+			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
 				int colour = screenSquares[screenRow][screenColumn];
 				if( colour >= 0 && colour <= 3 )
 					display.setColor(COLOUR_BLUE[0], COLOUR_BLUE[1], COLOUR_BLUE[2]);
@@ -68,7 +68,12 @@ public class Picture {
 				else
 					display.setColor(COLOUR_BROWN[0], COLOUR_BROWN[1], COLOUR_BROWN[2]);
 				
-				display.plot(SCREEN_SIZE - screenColumn, SCREEN_SIZE - screenRow);
+				/* {SCREEN_SIZE - coordinate} converts to screen coordinates
+				 * Must use {3 + ...} as highest element is 199 (one-less) */
+				int xCoord = SCREEN_SIZE - (3 + screenColumn * 3);
+				int yCoord = SCREEN_SIZE - (3 + screenRow * 3);
+				System.out.println(xCoord + " " +  yCoord);
+				display.fillRectangle(xCoord, yCoord, 3, 3);
 			}
 		}
 		
