@@ -9,7 +9,7 @@
 import sheffield.*;
 
 public class Picture {
-	enum colours { BLUE, GREEN_1, GREEN_2, BROWN };
+	enum Colours { BLUE, GREEN_1, GREEN_2, BROWN };
 
 	
 	public static void main(String args[]) {
@@ -52,7 +52,7 @@ public class Picture {
 		/* Load values from string into integer array */
 		for(int screenRow=0; screenRow<ARRAY_SIZE && !done; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				currentChar = (screenRow * ARRAY_SIZE) + screenColumn;
+				//currentChar = (screenRow * ARRAY_SIZE) + screenColumn;
 				
 				/* Check to make sure there aren't too many numbers for array */
 				if( currentChar > (fileData.length() - 1) ) {
@@ -62,10 +62,11 @@ public class Picture {
 				
 				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentChar));
 				//System.out.println(screenSquares[screenRow][screenColumn]);
+				currentChar++;
 				System.out.println(currentChar);
 			}
 		}
-		System.out.println("Finished loading numbers (found " + (currentChar + 1) + ")");
+		System.out.println("Finished loading numbers (found " + currentChar + ")");
 
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
@@ -92,12 +93,18 @@ public class Picture {
 		
 		
 		/* Work in progress! */
-		int colour = 0;
-		colours colourType = colours.BROWN;
-		colours rowColourType = colours.BROWN;
-		colours columnColourType = colours.BROWN;
 		
-		colours lastColumnColour = colours.BROWN, lastRowColour = colours.BROWN;
+		/* File's numerical value of current colour */
+		int currentColourValue = 0;
+		
+		/* Current colour value */
+		Colours currentColour = Colours.BROWN;
+		
+		Colours rowColour = Colours.BROWN;
+		Colours columnColour = Colours.BROWN;
+		
+		int lastRowColourValue = 0;
+		Colours lastColumnColour = Colours.BROWN, lastRowColour = Colours.BROWN;
 		boolean isColumnEdge = false;
 		boolean isRowEdge = false;
 		
@@ -105,21 +112,40 @@ public class Picture {
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				colour = screenSquares[screenRow][screenColumn];
+				currentColourValue = screenSquares[screenRow][screenColumn];
 				
-				if( colour >= 0 && colour <= 3 )
-					colourType = colours.BLUE;
-				else if( colour >= 4 && colour <= 5 )
-					colourType = colours.GREEN_1;
-				else if( colour >= 6 && colour <= 7 )
-					colourType = colours.GREEN_2;
+				if( currentColourValue >= 0 && currentColourValue <= 3 )
+					currentColour = Colours.BLUE;
+				else if( currentColourValue >= 4 && currentColourValue <= 5 )
+					currentColour = Colours.GREEN_1;
+				else if( currentColourValue >= 6 && currentColourValue <= 7 )
+					currentColour = Colours.GREEN_2;
 				else
-					colourType = colours.BROWN;
+					currentColour = Colours.BROWN;
 				
-				if( colourType != lastColumnColour )
+				if( currentColour != lastColumnColour )
 					isColumnEdge = true;
 				else
 					isColumnEdge = false;
+				
+				if( screenRow > 0 )
+					lastRowColourValue = screenSquares[screenRow - 1][screenColumn];
+					
+					
+					
+				if( lastRowColourValue >= 0 && lastRowColourValue <= 3 )
+					lastRowColour= Colours.BLUE;
+				else if( lastRowColourValue >= 4 && lastRowColourValue <= 5 )
+					lastRowColour = Colours.GREEN_1;
+				else if( lastRowColourValue >= 6 && lastRowColourValue <= 7 )
+					lastRowColour = Colours.GREEN_2;
+				else
+					lastRowColour = Colours.BROWN;
+					
+				if( currentColour != lastRowColour )
+					isRowEdge = true;
+				else
+					isRowEdge = false;
 				
 				if( isColumnEdge || isRowEdge ) {
 					bwDisplay.setColor(COLOUR_BLACK[0], COLOUR_BLACK[1], COLOUR_BLACK[2]);
@@ -128,17 +154,12 @@ public class Picture {
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
 				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
-				lastColumnColour = colourType;
+				lastColumnColour = currentColour;
+				
+
 			}
 			
-			
-			if( colourType != lastRowColour )
-				isRowEdge = true;
-			else
-				isRowEdge = false;
-
-			
-			lastRowColour = colourType;			
+			//lastRowColour = currentColour;			
 		}
 		
 	}
