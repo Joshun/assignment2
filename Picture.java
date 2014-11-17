@@ -72,7 +72,7 @@ public class Picture {
 				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentCharIndex));
 				//System.out.println(screenSquares[screenRow][screenColumn]);
 				currentCharIndex++;
-				System.out.println(currentCharIndex);
+				//System.out.println(currentCharIndex);
 			}
 		}
 		/* currentChar will be one higher than number of chars already (since it is incremented after the check)
