@@ -82,11 +82,13 @@ public class Picture {
 					display.setColor(COLOUR_BROWN[0], COLOUR_BROWN[1], COLOUR_BROWN[2]);
 				
 				/* {SCREEN_SIZE - coordinate} converts to screen coordinates
-				 * Must use {3 + ...} as highest element is 199 (one-less) */
-				int xCoord = SCREEN_SIZE - (3 + screenColumn * 3);
-				int yCoord = SCREEN_SIZE - (3 + screenRow * 3);
-				//System.out.println(xCoord + " " +  yCoord);
-				display.fillRectangle(xCoord, yCoord, 3, 3);
+				 * Must use {screenColumn + 1} as array is zero-based index */
+				int xCoord = SCREEN_SIZE - ((screenColumn + 1) * BLOCK_SIZE);
+				int yCoord = SCREEN_SIZE - ((screenRow + 1) * BLOCK_SIZE);
+				display.fillRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
+				//System.out.println("xCoord=" + xCoord + " yCoord=" + yCoord);
+				//System.out.println("row=" + screenRow + " column=" + screenColumn);
+
 			}
 		}
 		
@@ -129,9 +131,7 @@ public class Picture {
 					isColumnEdge = false;
 				
 				if( screenRow > 0 )
-					lastRowColourValue = screenSquares[screenRow - 1][screenColumn];
-					
-					
+					lastRowColourValue = screenSquares[screenRow - 1][screenColumn];		
 					
 				if( lastRowColourValue >= 0 && lastRowColourValue <= 3 )
 					lastRowColour= Colours.BLUE;
