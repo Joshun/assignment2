@@ -11,6 +11,16 @@ import sheffield.*;
 public class Picture {
 	enum Colours { BLUE, GREEN_1, GREEN_2, BROWN };
 
+	public static Colours getColourValue(int colourValue) {
+		if( colourValue >= 0 && colourValue <= 3 )
+			return Colours.BLUE;
+		else if( colourValue >= 4 && colourValue <= 5)
+			return Colours.GREEN_1;
+		else if( colourValue >=6 && colourValue <= 7)
+			return Colours.GREEN_2;
+		else
+			return Colours.BROWN;
+	}
 	
 	public static void main(String args[]) {
 		
@@ -47,36 +57,39 @@ public class Picture {
 		
 		boolean done = false;
 		
-		int currentChar = 0;
+		int currentCharIndex = 0;
 		
 		/* Load values from string into integer array */
 		for(int screenRow=0; screenRow<ARRAY_SIZE && !done; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				//currentChar = (screenRow * ARRAY_SIZE) + screenColumn;
 				
 				/* Check to make sure there aren't too many numbers for array */
-				if( currentChar > (fileData.length() - 1) ) {
+				if( currentCharIndex > (fileData.length() - 1) ) {
 					done = true;
 					break;
 				}
 				
-				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentChar));
+				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentCharIndex));
 				//System.out.println(screenSquares[screenRow][screenColumn]);
-				currentChar++;
-				System.out.println(currentChar);
+				currentCharIndex++;
+				System.out.println(currentCharIndex);
 			}
 		}
-		System.out.println("Finished loading numbers (found " + currentChar + ")");
+		/* currentChar will be one higher than number of chars already (since it is incremented after the check)
+		 * so no need to do (currentChar + 1) */
+		System.out.println("Finished loading numbers (found " + currentCharIndex + ")");
 
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				int colour = screenSquares[screenRow][screenColumn];
-				if( colour >= 0 && colour <= 3 )
+				int currentColourValue = screenSquares[screenRow][screenColumn];
+				Colours currentColour = getColourValue(currentColourValue);
+				
+				if( currentColour == Colours.BLUE )
 					display.setColor(COLOUR_BLUE[0], COLOUR_BLUE[1], COLOUR_BLUE[2]);
-				else if( colour >= 4 && colour <= 5)
+				else if( currentColour == Colours.GREEN_1 )
 					display.setColor(COLOUR_GREEN_1[0], COLOUR_GREEN_1[1], COLOUR_GREEN_1[2]);
-				else if( colour >=6 && colour <= 7)
+				else if( currentColour == Colours.GREEN_2 )
 					display.setColor(COLOUR_GREEN_2[0], COLOUR_GREEN_2[1], COLOUR_GREEN_2[2]);
 				else
 					display.setColor(COLOUR_BROWN[0], COLOUR_BROWN[1], COLOUR_BROWN[2]);
@@ -86,27 +99,22 @@ public class Picture {
 				int xCoord = SCREEN_SIZE - ((screenColumn + 1) * BLOCK_SIZE);
 				int yCoord = SCREEN_SIZE - ((screenRow + 1) * BLOCK_SIZE);
 				display.fillRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
-				//System.out.println("xCoord=" + xCoord + " yCoord=" + yCoord);
-				//System.out.println("row=" + screenRow + " column=" + screenColumn);
-
 			}
 		}
 		
-		
-		
-		/* Work in progress! */
-		
-		/* File's numerical value of current colour */
-		int currentColourValue = 0;
+				
+		/* File's numerical value of current colour (set to initial position)*/
+		int currentColourValue = screenSquares[0][0];
 		
 		/* Current colour value */
-		Colours currentColour = Colours.BROWN;
+		Colours currentColour = getColourValue(currentColourValue);
 		
-		Colours rowColour = Colours.BROWN;
-		Colours columnColour = Colours.BROWN;
+		Colours rowColour = currentColour;
+		Colours columnColour = currentColour;
 		
-		int lastRowColourValue = 0;
-		Colours lastColumnColour = Colours.BROWN, lastRowColour = Colours.BROWN;
+		int lastRowColourValue = currentColourValue;
+		Colours lastRowColour = currentColour;
+		Colours lastColumnColour = currentColour;
 		boolean isColumnEdge = false;
 		boolean isRowEdge = false;
 		
@@ -116,14 +124,8 @@ public class Picture {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
 				currentColourValue = screenSquares[screenRow][screenColumn];
 				
-				if( currentColourValue >= 0 && currentColourValue <= 3 )
-					currentColour = Colours.BLUE;
-				else if( currentColourValue >= 4 && currentColourValue <= 5 )
-					currentColour = Colours.GREEN_1;
-				else if( currentColourValue >= 6 && currentColourValue <= 7 )
-					currentColour = Colours.GREEN_2;
-				else
-					currentColour = Colours.BROWN;
+				currentColour = getColourValue(currentColourValue);
+				
 				
 				if( currentColour != lastColumnColour )
 					isColumnEdge = true;
@@ -132,16 +134,9 @@ public class Picture {
 				
 				if( screenRow > 0 )
 					lastRowColourValue = screenSquares[screenRow - 1][screenColumn];		
-					
-				if( lastRowColourValue >= 0 && lastRowColourValue <= 3 )
-					lastRowColour= Colours.BLUE;
-				else if( lastRowColourValue >= 4 && lastRowColourValue <= 5 )
-					lastRowColour = Colours.GREEN_1;
-				else if( lastRowColourValue >= 6 && lastRowColourValue <= 7 )
-					lastRowColour = Colours.GREEN_2;
-				else
-					lastRowColour = Colours.BROWN;
-					
+				
+				lastRowColour = getColourValue(lastRowColourValue);
+
 				if( currentColour != lastRowColour )
 					isRowEdge = true;
 				else
@@ -159,7 +154,6 @@ public class Picture {
 
 			}
 			
-			//lastRowColour = currentColour;			
 		}
 		
 	}
