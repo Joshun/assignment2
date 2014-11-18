@@ -53,7 +53,7 @@ public class Picture {
 		final String fileData = fileInput.readString();
 		
 		/* Create new array to store picture contents */
-		int[][] screenSquares = new int[ARRAY_SIZE][ARRAY_SIZE];
+		Colours[][] screenSquares = new Colours[ARRAY_SIZE][ARRAY_SIZE];
 		
 		boolean done = false;
 		
@@ -69,10 +69,12 @@ public class Picture {
 					break;
 				}
 				
-				screenSquares[screenRow][screenColumn] = Character.getNumericValue(fileData.charAt(currentCharIndex));
-				//System.out.println(screenSquares[screenRow][screenColumn]);
+				/* Get integer value from current character */
+				int currentColourValue = Character.getNumericValue(fileData.charAt(currentCharIndex));
+				
+				/* Convert integer value to colour value and store in array */
+				screenSquares[screenRow][screenColumn] = getColourValue(currentColourValue);
 				currentCharIndex++;
-				//System.out.println(currentCharIndex);
 			}
 		}
 		/* currentChar will be one higher than number of chars already (since it is incremented after the check)
@@ -82,8 +84,7 @@ public class Picture {
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				int currentColourValue = screenSquares[screenRow][screenColumn];
-				Colours currentColour = getColourValue(currentColourValue);
+				Colours currentColour = screenSquares[screenRow][screenColumn];
 				
 				if( currentColour == Colours.BLUE )
 					display.setColor(COLOUR_BLUE[0], COLOUR_BLUE[1], COLOUR_BLUE[2]);
@@ -102,17 +103,14 @@ public class Picture {
 			}
 		}
 		
-				
-		/* File's numerical value of current colour (set to initial position)*/
-		int currentColourValue = screenSquares[0][0];
 		
-		/* Current colour value */
-		Colours currentColour = getColourValue(currentColourValue);
+		/* Current colour value at initial position */
+		Colours currentColour = screenSquares[0][0];
 		
 		Colours rowColour = currentColour;
 		Colours columnColour = currentColour;
 		
-		int lastRowColourValue = currentColourValue;
+		//int lastRowColourValue = currentColourValue;
 		Colours lastRowColour = currentColour;
 		Colours lastColumnColour = currentColour;
 		boolean isColumnEdge = false;
@@ -121,22 +119,17 @@ public class Picture {
 		
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
-			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
-				currentColourValue = screenSquares[screenRow][screenColumn];
-				
-				currentColour = getColourValue(currentColourValue);
-				
-				
+			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {				
+				currentColour = screenSquares[screenRow][screenColumn];
+
 				if( currentColour != lastColumnColour )
 					isColumnEdge = true;
 				else
 					isColumnEdge = false;
 				
 				if( screenRow > 0 )
-					lastRowColourValue = screenSquares[screenRow - 1][screenColumn];		
+					lastRowColour = screenSquares[screenRow - 1][screenColumn];		
 				
-				lastRowColour = getColourValue(lastRowColourValue);
-
 				if( currentColour != lastRowColour )
 					isRowEdge = true;
 				else
@@ -150,8 +143,6 @@ public class Picture {
 
 				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
 				lastColumnColour = currentColour;
-				
-
 			}
 			
 		}
