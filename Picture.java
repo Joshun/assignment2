@@ -55,11 +55,13 @@ public class Picture {
 		/* Create new array to store picture contents */
 		Colours[][] screenSquares = new Colours[ARRAY_SIZE][ARRAY_SIZE];
 		
+		/* Boolean variable set to true when reading process finished */
 		boolean done = false;
 		
+		/* Position of current character */
 		int currentCharIndex = 0;
 		
-		/* Load values from string into integer array */
+		/* Load values from string into 'Colours' array */
 		for(int screenRow=0; screenRow<ARRAY_SIZE && !done; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {
 				
