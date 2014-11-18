@@ -114,7 +114,6 @@ public class Picture {
 		Colours rowColour = currentColour;
 		Colours columnColour = currentColour;
 		
-		//int lastRowColourValue = currentColourValue;
 		Colours lastRowColour = currentColour;
 		Colours lastColumnColour = currentColour;
 		
