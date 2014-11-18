@@ -9,6 +9,8 @@
 import sheffield.*;
 
 public class Picture {
+	
+	/* Type to store restricted colour values so they can be compared and drawn more easily */
 	enum Colours { BLUE, GREEN_1, GREEN_2, BROWN };
 
 	public static Colours getColourValue(int colourValue) {
