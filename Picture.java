@@ -117,31 +117,17 @@ public class Picture {
 		//int lastRowColourValue = currentColourValue;
 		Colours lastRowColour = currentColour;
 		Colours lastColumnColour = currentColour;
-		boolean isColumnEdge = false;
-		boolean isRowEdge = false;
-		
 		
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {				
 				currentColour = screenSquares[screenRow][screenColumn];
 
-				if( currentColour != lastColumnColour )
-					isColumnEdge = true;
-				else
-					isColumnEdge = false;
-				
 				if( screenRow > 0 )
 					lastRowColour = screenSquares[screenRow - 1][screenColumn];		
 				
-				if( currentColour != lastRowColour )
-					isRowEdge = true;
-				else
-					isRowEdge = false;
-				
-				if( isColumnEdge || isRowEdge ) {
+				if( currentColour != lastColumnColour || currentColour != lastRowColour )
 					bwDisplay.setColor(COLOUR_BLACK[0], COLOUR_BLACK[1], COLOUR_BLACK[2]);
-				}
 				else
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
