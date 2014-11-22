@@ -104,6 +104,8 @@ public class Picture {
 				int xCoord = SCREEN_SIZE - ((screenColumn + 1) * BLOCK_SIZE);
 				int yCoord = SCREEN_SIZE - ((screenRow + 1) * BLOCK_SIZE);
 				display.fillRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
+				/* Workaround 1 pixel bug */
+				display.drawRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
 			}
 		}
 		
