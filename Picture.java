@@ -114,8 +114,11 @@ public class Picture {
 		Colours rowColour = currentColour;
 		Colours columnColour = currentColour;
 		
-		Colours lastRowColour = currentColour;
-		Colours lastColumnColour = currentColour;
+		Colours prevRowColour = currentColour;
+		Colours prevColumnColour = currentColour;
+		
+		Colours nextRowColour = currentColour;
+		Colours nextColumnColour = currentColour;
 		
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
@@ -123,15 +126,23 @@ public class Picture {
 				currentColour = screenSquares[screenRow][screenColumn];
 
 				if( screenRow > 0 )
-					lastRowColour = screenSquares[screenRow - 1][screenColumn];		
+					prevRowColour = screenSquares[screenRow - 1][screenColumn];
+				if( (screenRow + 1) < ARRAY_SIZE )
+					nextRowColour = screenSquares[screenRow + 1][screenColumn];
+
+				if( screenColumn > 0 )
+					prevColumnColour = screenSquares[screenRow][screenColumn - 1];			
+				if( (screenColumn + 1) < ARRAY_SIZE )
+					nextColumnColour = screenSquares[screenRow][screenColumn + 1];
 				
-				if( currentColour != lastColumnColour || currentColour != lastRowColour )
+				if( currentColour != prevColumnColour || currentColour != prevRowColour
+					|| currentColour != nextColumnColour || currentColour != nextRowColour)
 					bwDisplay.setColor(COLOUR_BLACK[0], COLOUR_BLACK[1], COLOUR_BLACK[2]);
 				else
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
 				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
-				lastColumnColour = currentColour;
+				//prevColumnColour = currentColour;
 			}
 			
 		}
