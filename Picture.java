@@ -142,7 +142,6 @@ public class Picture {
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
 				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
-				//prevColumnColour = currentColour;
 			}
 			
 		}
