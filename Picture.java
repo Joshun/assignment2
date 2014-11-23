@@ -101,7 +101,7 @@ public class Picture {
 				
 				/* {SCREEN_SIZE - coordinate} converts to screen coordinates
 				 * Must use {screenColumn + 1} as array is zero-based index */
-				int xCoord = SCREEN_SIZE - ((screenColumn + 1) * BLOCK_SIZE);
+				int xCoord = ((screenColumn) * BLOCK_SIZE);
 				int yCoord = SCREEN_SIZE - ((screenRow + 1) * BLOCK_SIZE);
 				display.fillRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
 				/* Workaround 1 pixel bug */
@@ -122,28 +122,41 @@ public class Picture {
 		Colours nextRowColour = currentColour;
 		Colours nextColumnColour = currentColour;
 		
+		boolean rowEdgeAlready = false;
+		boolean columnEdgeAlready = false;
+		
 		/* Display colour values on screen */
 		for(int screenRow=0; screenRow<ARRAY_SIZE; screenRow++) {
 			for(int screenColumn=0; screenColumn<ARRAY_SIZE; screenColumn++) {				
 				currentColour = screenSquares[screenRow][screenColumn];
 
-				if( screenRow > 0 )
+				if( screenRow > 0 ) {
 					prevRowColour = screenSquares[screenRow - 1][screenColumn];
+					rowEdgeAlready = true;
+				}
+				else
+					rowEdgeAlready = false;
+					
 				if( (screenRow + 1) < ARRAY_SIZE )
 					nextRowColour = screenSquares[screenRow + 1][screenColumn];
 
-				if( screenColumn > 0 )
-					prevColumnColour = screenSquares[screenRow][screenColumn - 1];			
+				if( screenColumn > 0 ) {
+					prevColumnColour = screenSquares[screenRow][screenColumn - 1];
+					columnEdgeAlready = true;
+				}	
+				else
+					columnEdgeAlready = false;
+				
 				if( (screenColumn + 1) < ARRAY_SIZE )
 					nextColumnColour = screenSquares[screenRow][screenColumn + 1];
 				
-				if( currentColour != prevColumnColour || currentColour != prevRowColour
+				if( (currentColour != prevColumnColour && !columnEdgeAlready ) || (currentColour != prevRowColour && ! rowEdgeAlready)
 					|| currentColour != nextColumnColour || currentColour != nextRowColour)
 					bwDisplay.setColor(COLOUR_BLACK[0], COLOUR_BLACK[1], COLOUR_BLACK[2]);
 				else
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
-				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
+				bwDisplay.plot((screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
 			}
 			
 		}
