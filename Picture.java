@@ -101,7 +101,7 @@ public class Picture {
 				
 				/* {SCREEN_SIZE - coordinate} converts to screen coordinates
 				 * Must use {screenColumn + 1} as array is zero-based index */
-				int xCoord = SCREEN_SIZE - ((screenColumn + 1) * BLOCK_SIZE);
+				int xCoord = ((screenColumn + 1) * BLOCK_SIZE);
 				int yCoord = SCREEN_SIZE - ((screenRow + 1) * BLOCK_SIZE);
 				display.fillRectangle(xCoord, yCoord, BLOCK_SIZE, BLOCK_SIZE);
 				/* Workaround 1 pixel bug */
@@ -143,7 +143,7 @@ public class Picture {
 				else
 					bwDisplay.setColor(COLOUR_WHITE[0], COLOUR_WHITE[1], COLOUR_WHITE[2]);
 
-				bwDisplay.plot(BW_SCREEN_SIZE - (screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
+				bwDisplay.plot((screenColumn + 1), BW_SCREEN_SIZE - (screenRow + 1));
 			}
 			
 		}
